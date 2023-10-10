@@ -15,5 +15,5 @@ interface Options<T> {
     onSet?: SubscriberFunc<T>;
 }
 declare type Comparator<TSelected = unknown> = (a: TSelected, b: TSelected) => boolean;
-export declare function newRidgeState<T>(initialValue: T, options?: Options<T>): StateWithValue<T>;
+export declare function newRidgeState<T>(initialValue: T | (() => T), options?: Options<T>): StateWithValue<T>;
 export {};

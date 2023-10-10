@@ -18,9 +18,12 @@ function useComparator(v, c = equ) {
     }
     return nv;
 }
+function makeInitialValue(initialValue) {
+    return initialValue instanceof Function ? initialValue() : initialValue;
+}
 function newRidgeState(initialValue, options) {
     let sb = [];
-    let v = initialValue;
+    let v = makeInitialValue(initialValue);
     function set(newValue, callback) {
         const pv = v;
         v = newValue instanceof Function ? newValue(v) : newValue;
@@ -55,7 +58,7 @@ function newRidgeState(initialValue, options) {
         useValue: () => use()[0],
         get: () => v,
         set,
-        reset: () => set(initialValue),
+        reset: () => set(makeInitialValue(initialValue)),
         subscribe,
     };
 }
