@@ -66,15 +66,19 @@ function useComparator<T>(v: T, c: Comparator<T> = equ): T {
   return nv;
 }
 
+function makeInitialValue<T>(initialValue: T | (() => T)) {
+  return initialValue instanceof Function ? initialValue() : initialValue;
+}
+
 export function newRidgeState<T>(
-  initialValue: T,
+  initialValue: T | (() => T),
   options?: Options<T>
 ): StateWithValue<T> {
   // subscribers with callbacks for external updates
   let sb: SubscriberFunc<T>[] = [];
 
   // internal value of the state
-  let v: T = initialValue;
+  let v: T = makeInitialValue(initialValue);
 
   // set function
   function set(newValue: SetStateAction<T>, callback?: SubscriberFunc<T>) {
@@ -137,7 +141,7 @@ export function newRidgeState<T>(
     useValue: () => use()[0],
     get: () => v,
     set,
-    reset: () => set(initialValue),
+    reset: () => set(makeInitialValue(initialValue)),
     subscribe,
   };
 }
